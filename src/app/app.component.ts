@@ -1,18 +1,27 @@
 import { Component } from '@angular/core';
+import { LocalstorageDbService } from './services/localstorage-db.service'
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  public user: string;
   public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
+    { title: 'New workout', url: '/new-workout', icon: 'add-circle' },
+    { title: 'My workouts', url: '/workouts', icon: 'barbell' },
+    { title: 'Favorites', url: '/favorites', icon: 'heart' },
+    { title: 'Archived', url: '/archived', icon: 'archive' },
+    { title: 'Trash', url: '/trash', icon: 'trash' },
+    { title: 'History', url: '/history', icon: 'calendar' },
+    { title: 'Progress', url: '/progress', icon: 'stats-chart' },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  constructor(private localStorageDbService: LocalstorageDbService) {}
+
+  ngOnInit() {
+    this.user = 'Albert';
+    localStorage.setItem('name', this.user)
+    this.localStorageDbService.createExerciseDb()
+  }
 }
