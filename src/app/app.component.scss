@@ -82,10 +82,11 @@ ion-menu.ios ion-item {
   --padding-start: 16px;
   --padding-end: 16px;
   --min-height: 50px;
+  --background: none !important;
 }
 
 ion-menu.ios ion-item.selected ion-icon {
-  color: var(--ion-color-primary);
+  color: var(--ion-text-color) !important;
 }
 
 ion-menu.ios ion-item ion-icon {
@@ -115,5 +116,6 @@ ion-note {
 }
 
 ion-item.selected {
-  --color: var(--ion-color-primary);
+  background: var(--color-custom-highlight);
+  border-radius: 1em;
 }
