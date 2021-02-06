@@ -24,3 +24,16 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+ion-menu-button {
+    color: var(--color-custom-highlight);
+}
+
+.exercise-card {
+    footer {
+        text-align: right;
+        padding: .2em 1em;
+        font-size: 2em;
+    }
+}
+
