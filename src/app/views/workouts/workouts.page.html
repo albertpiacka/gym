@@ -15,18 +15,35 @@
   </ion-header>
 
   <ion-list>
-    <ion-card *ngFor="let item of workouts" class="exercise-card">
+    <ion-card *ngFor="let workout of workouts" class="exercise-card">
       <ion-card-header>
-        <ion-card-subtitle>Exercise: </ion-card-subtitle>
-        <ion-card-title>{{item.name}}</ion-card-title>
+        <ion-card-title>{{workout.name}}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <h1>{{item.sets}} X {{item.reps}}</h1>
+        <ion-card-subtitle>Exercises: </ion-card-subtitle>
+        <h1 *ngFor="let exercise of workout.exercises">
+          {{exercise.name}} 
+          | {{exercise.sets}} x {{exercise.reps}}
+          | <strong>{{exercise.starting}} kg</strong>
+        </h1>
       </ion-card-content>
 
       <footer>
+        <small *ngIf="workout.created_at">{{workout.created_at}}</small>
         <ion-icon name="play-outline"></ion-icon>
       </footer>
+    </ion-card>
+
+    <ion-card *ngIf="workouts.length == 0" class="intro-card">
+      <ion-card-header>
+        <ion-card-title>You haven't created any workout yet!</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <ion-button class="newWorkoutBtn" expand="block" color="danger" routerDirection="root" routerLink="/new-workout">
+          New workout
+        </ion-button>
+      </ion-card-content>
     </ion-card>
   </ion-list>  
 
