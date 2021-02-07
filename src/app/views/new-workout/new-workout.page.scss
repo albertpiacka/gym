@@ -2,6 +2,11 @@ ion-fab {
     margin: 0 1em;
 }
 
+ion-list {
+    min-height: 10vh;
+    background: none;
+}
+
 .exercise-card {
     footer {
         text-align: right;
@@ -9,3 +14,10 @@ ion-fab {
         font-size: 2em;
     }
 }
+
+ion-button {
+    width: 90%;
+    margin: auto;
+}
+
+
