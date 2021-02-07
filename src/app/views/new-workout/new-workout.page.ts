@@ -6,6 +6,8 @@ interface Exercise {
   name: string,
   sets: number,
   reps: number,
+  starting: number,
+  increments: number,
 }
 
 @Component({
@@ -14,14 +16,20 @@ interface Exercise {
   styleUrls: ['./new-workout.page.scss'],
 })
 export class NewWorkoutPage implements OnInit {
-  // Input data
-  name: any = '';
-  sets: any = '';
-  reps: any = '';
+  // Input for workout name
+  workoutName: string = '';
+
+  // Input for exercises
+  name: string = '';
+  sets: number = null;
+  reps: number = null;
+  starting: number = null;
+  increments: number = null;
 
   // Database variable
   db: any = '';
 
+  // Data
   exercises: Exercise[] = [];
   counter: number = 0;
 
@@ -39,24 +47,36 @@ export class NewWorkoutPage implements OnInit {
         id: this.counter,
         name: this.name,
         sets: this.sets,
-        reps: this.sets
+        reps: this.sets,
+        starting: this.starting,
+        increments: this.increments
       }
     )
 
-    this.db.get('workouts')
-           .push(
-            {
-              id: this.counter,
-              name: this.name,
-              sets: this.sets,
-              reps: this.sets
-            }
-           )
-           .write()
-
     this.name = ''
-    this.sets = ''
-    this.reps = ''
+    this.sets = null
+    this.reps = null
+    this.starting = null
+    this.increments = null
+  }
+
+  createWorkout(){
+    let workout = 
+    {
+      name: this.workoutName,
+      created_at: Date().split(' ', 4).join().replace(/,/g, ' '),
+      exercises: []
+    }
+
+    this.exercises.forEach(exercise => {
+      workout.exercises.push(exercise)
+    })
+
+    this.db.get('workouts')
+           .push(workout)
+           .write()
+    
+    
   }
 
   ngOnInit() {
