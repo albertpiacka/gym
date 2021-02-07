@@ -18,7 +18,7 @@ export class LocalstorageDbService {
     const adapter = new LocalStorage('db')
     const db = low(adapter)
 
-    db.defaults({ workouts: [], testWorkouts: [] })
+    db.defaults({ workouts: [], favorites: [], archived: [], trash: [], history: []})
       .write()
 
       this.db = db
