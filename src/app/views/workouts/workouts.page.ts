@@ -12,7 +12,10 @@ export class WorkoutsPage implements OnInit {
   db: any = '';
 
   // Workouts
-  workouts: [] = [];
+  workouts: any[] = [];
+
+  // Exercises
+  exercises: any[] = []
 
   constructor(private localStorageDbService: LocalstorageDbService) { }
 
@@ -20,31 +23,20 @@ export class WorkoutsPage implements OnInit {
     this.db = this.localStorageDbService.returnDb()
     this.workouts = this.db.get('workouts').value()
 
-    this.db.get('testWorkouts')
-            .push(
-              {
-                id: 1,
-                name: 'upper body',
-                exercises: [
-                  {
-                    name: 'squat',
-                    sets: 5,
-                    reps: 5
-                  },
-                  {
-                    name: 'bench',
-                    sets: 5,
-                    reps: 5
-                  },
-                  {
-                    name: 'row',
-                    sets: 5,
-                    reps: 5
-                  },
-                ]
-              }
-            )
-            .write()
+    this.workouts.forEach(workout => {
+      workout.exercises.forEach(e => {
+        this.exercises.push(e)
+      })
+    })
+
+    this.exercises = this.exercises.reduce((acc, current) => {
+      const x = acc.find(item => item.name === current.name);
+      if (!x) {
+        return acc.concat([current]);
+      } else {
+        return acc;
+      }
+    }, []);
   }
 
 }
