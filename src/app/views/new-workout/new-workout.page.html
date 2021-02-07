@@ -15,6 +15,10 @@
   </ion-header>
 
   <main>
+    <ion-item>
+      <ion-input placeholder="Name of workout" [(ngModel)]="workoutName"></ion-input>
+    </ion-item>
+
     <ion-card>
       <ion-item>
         <ion-input placeholder="Name of exercise" [(ngModel)]="name"></ion-input>
@@ -26,6 +30,26 @@
 
       <ion-item>
         <ion-input placeholder="Number of reps" [(ngModel)]="reps"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input placeholder="Starting weight" [(ngModel)]="starting"></ion-input>
+      </ion-item>
+
+      <!-- <ion-item>
+        <ion-input placeholder="Increments per workout" [(ngModel)]="increments"></ion-input>
+      </ion-item> -->
+
+      <ion-item>
+        <ion-select placeholder="Increments per workout">
+          <ion-select-option value="0">0</ion-select-option>
+          <ion-select-option value="1">1</ion-select-option>
+          <ion-select-option value="2">2</ion-select-option>
+          <ion-select-option value="2.5">2.5</ion-select-option>
+          <ion-select-option value="3">3</ion-select-option>
+          <ion-select-option value="5">5</ion-select-option>
+          <ion-select-option value="10">10</ion-select-option>
+        </ion-select>
       </ion-item>
     </ion-card>
 
@@ -44,12 +68,18 @@
         <ion-card-content>
           <h1>{{item.sets}} X {{item.reps}}</h1>
         </ion-card-content>
-
-        <footer>
-          <ion-icon name="play-outline"></ion-icon>
-        </footer>
       </ion-card>
-    </ion-list>     
+    </ion-list>  
+
+    <ion-button 
+      class="createWorkoutBtn" 
+      expand="block" 
+      color="danger" 
+      (click)="createWorkout()"
+      *ngIf="exercises.length > 0"
+    >
+      Create workout
+    </ion-button>
   </main>
 
 </ion-content>
