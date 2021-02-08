@@ -54,7 +54,7 @@ ion-menu.md ion-item.selected {
 }
 
 ion-menu.md ion-item.selected ion-icon {
-  color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast) !important;
 }
 
 ion-menu.md ion-item ion-icon {
@@ -86,7 +86,7 @@ ion-menu.ios ion-item {
 }
 
 ion-menu.ios ion-item.selected ion-icon {
-  color: var(--ion-text-color) !important;
+  color: var(--ion-color-primary-contrast) !important;
 }
 
 ion-menu.ios ion-item ion-icon {
