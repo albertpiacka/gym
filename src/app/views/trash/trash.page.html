@@ -14,4 +14,36 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-list>
+    <ion-card *ngFor="let workout of workouts" class="exercise-card">
+      <ion-card-header>
+        <ion-card-title>{{workout.name}}</ion-card-title>
+        <ion-card-subtitle>Deceased</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-card-subtitle>Exercises: </ion-card-subtitle>
+        <h1 *ngFor="let exercise of workout.exercises">
+          {{exercise.name}} 
+          | {{exercise.sets}} x {{exercise.reps}}
+          | <strong>{{exercise.starting}} kg</strong>
+        </h1>
+      </ion-card-content>
+
+      <aside>
+        <small *ngIf="workout.created_at">{{workout.created_at}}</small>
+      </aside>
+
+      <footer>
+        <ion-button color="success" (click)="reviveWorkout(workout)">Revive</ion-button>
+        <ion-button color="danger" (click)="deletePermanently(workout)">Delete permanently</ion-button>
+      </footer>
+    </ion-card>
+
+    <ion-card *ngIf="workouts.length == 0" class="intro-card">
+      <ion-card-header>
+        <h1>No records</h1>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>  
+
 </ion-content>
