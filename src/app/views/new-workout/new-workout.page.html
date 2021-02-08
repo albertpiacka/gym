@@ -36,12 +36,8 @@
         <ion-input placeholder="Starting weight" [(ngModel)]="starting"></ion-input>
       </ion-item>
 
-      <!-- <ion-item>
-        <ion-input placeholder="Increments per workout" [(ngModel)]="increments"></ion-input>
-      </ion-item> -->
-
       <ion-item>
-        <ion-select placeholder="Increments per workout">
+        <ion-select placeholder="Increments per workout" [(ngModel)]="increments">
           <ion-select-option value="0">0</ion-select-option>
           <ion-select-option value="1">1</ion-select-option>
           <ion-select-option value="2">2</ion-select-option>
@@ -77,6 +73,7 @@
       color="danger" 
       (click)="createWorkout()"
       *ngIf="exercises.length > 0"
+      routerDirection="root" routerLink="/workouts"
     >
       Create workout
     </ion-button>
