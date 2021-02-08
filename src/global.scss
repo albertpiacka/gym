@@ -30,12 +30,28 @@ ion-menu-button {
 }
 
 .exercise-card {
+    min-height: 17em;
+
     footer {
         padding: 1em;
         font-size: 1.5em;
         display: flex;
         grid-gap: 1em;
         justify-content: space-between;
+    }
+
+    aside {
+        font-size: 1.2em;
+        padding: 0 1em;
+    }
+}
+
+.intro-card {
+    .newWorkoutBtn {
+        position: absolute;
+        width: 90%;
+        left: 5%;
+        bottom: 1em;
     }
 }
 
