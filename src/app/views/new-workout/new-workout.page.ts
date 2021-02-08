@@ -24,7 +24,7 @@ export class NewWorkoutPage implements OnInit {
   sets: number = null;
   reps: number = null;
   starting: number = null;
-  increments: number = null;
+  increments: number = 2.5;
 
   // Database variable
   db: any = '';
@@ -57,14 +57,27 @@ export class NewWorkoutPage implements OnInit {
     this.sets = null
     this.reps = null
     this.starting = null
-    this.increments = null
+    this.increments = 2.5
   }
 
   createWorkout(){
+    let workouts = this.db.get('workouts')
+                          .value()
+
+    let archived = this.db.get('archived')
+                          .value()
+
+    let trash = this.db.get('trash')
+                          .value()
+
+    let id = workouts.length + 1 + archived.length + 1 + trash.length + 1
+
     let workout = 
     {
+      id: id,
       name: this.workoutName,
       created_at: Date().split(' ', 4).join().replace(/,/g, ' '),
+      status: 'unliked',
       exercises: []
     }
 
@@ -74,9 +87,7 @@ export class NewWorkoutPage implements OnInit {
 
     this.db.get('workouts')
            .push(workout)
-           .write()
-    
-    
+           .write()  
   }
 
   ngOnInit() {
