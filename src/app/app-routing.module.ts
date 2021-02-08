@@ -39,11 +39,13 @@ const routes: Routes = [
     path: 'history',
     loadChildren: () => import('./views/history/history.module').then( m => m.HistoryPageModule)
   },
-  {
-    path: 'progress',
-    loadChildren: () => import('./views/progress/progress.module').then( m => m.ProgressPageModule)
-  },
+  // {
+  //   path: 'workout-modal',
+  //   loadChildren: () => import('./modal/workout-modal/workout-modal.module').then( m => m.WorkoutModalPageModule)
+  // },
 ];
+
+
 
 @NgModule({
   imports: [
