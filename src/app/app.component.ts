@@ -15,7 +15,6 @@ export class AppComponent {
     { title: 'Archived', url: '/archived', icon: 'archive' },
     { title: 'Trash', url: '/trash', icon: 'trash' },
     { title: 'History', url: '/history', icon: 'calendar' },
-    { title: 'Progress', url: '/progress', icon: 'stats-chart' },
   ];
   constructor(private localStorageDbService: LocalstorageDbService) {}
 
