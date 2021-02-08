@@ -28,9 +28,40 @@
         </h1>
       </ion-card-content>
 
-      <footer>
+      <aside>
         <small *ngIf="workout.created_at">{{workout.created_at}}</small>
-        <ion-icon name="play-outline"></ion-icon>
+      </aside>
+
+      <footer>        
+        <ion-fab horizontal="end" vertical="top" slot="fixed">
+          <ion-fab-button color="dark">
+            <ion-icon md="caret-forward" ios="chevron-forward-circle-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-list side="bottom">
+            <ion-fab-button color="light" (click)="presentModal(workout, 'play')">
+              <ion-icon name="play-outline"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="light" (click)="presentModal(workout, 'view')">
+              <ion-icon name="eye-outline"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="light" (click)="presentModal(workout, 'edit')">
+              <ion-icon name="create-outline"></ion-icon>
+            </ion-fab-button>
+          </ion-fab-list>
+        </ion-fab>
+
+        <ion-button color="danger" (click)="addToFavorites(workout)">
+          <ion-icon name="heart-outline" *ngIf="workout.status == 'unliked'"></ion-icon>
+          <ion-icon name="heart" *ngIf="workout.status == 'liked'"></ion-icon>
+        </ion-button>
+
+        <ion-button fill="outline" color="medium" (click)="addToArchived(workout)">
+          <ion-icon name="archive-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button color="dark" (click)="addToTrash(workout)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
       </footer>
     </ion-card>
 
