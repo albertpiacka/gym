@@ -24,16 +24,21 @@
         <ion-input placeholder="Name of exercise" [(ngModel)]="name"></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-input placeholder="Number of sets" [(ngModel)]="sets"></ion-input>
+      <ion-item class="addSet">
+        <div class="wrapper">
+          <ion-input placeholder="Reps" [(ngModel)]="reps"></ion-input>
+          <ion-input placeholder="Starting weight" [(ngModel)]="weight"></ion-input>
+          <ion-input placeholder="Set rest time" [(ngModel)]="rest"></ion-input>
+        </div>
+        <ion-button size="large" (click)="addSet()">Add</ion-button>
       </ion-item>
 
       <ion-item>
-        <ion-input placeholder="Number of reps" [(ngModel)]="reps"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-input placeholder="Starting weight" [(ngModel)]="starting"></ion-input>
+        <div class="sets">
+          <div class="set" *ngFor="let set of sets">
+            {{set.reps}} reps | {{set.weight}} Kg
+          </div>
+        </div>
       </ion-item>
 
       <ion-item>
@@ -62,7 +67,9 @@
           <ion-card-title>{{item.name}}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <h1>{{item.sets}} X {{item.reps}}</h1>
+          <h1 *ngFor="let set of item.sets">
+            {{set.reps}} reps | {{set.weight}} Kg
+          </h1>
         </ion-card-content>
       </ion-card>
     </ion-list>  
