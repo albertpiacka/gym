@@ -1,9 +1,54 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Workout {{data.name}} | {{meta}}</ion-title>
+    <ion-title>{{data.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-button (click)="dismiss()">Close</ion-button>
+  <section *ngIf="meta == 'play'" class="play-workout">
+    <ion-card>
+      <ion-card-content>
+        <div class="exercise" *ngFor="let exercise of data.exercises">
+          <h1>{{exercise.name}}</h1>
+          <div class="sets" *ngFor="let set of exercise.sets">
+            1 X {{set.reps}} | {{set.weight}} Kg
+            <ion-checkbox color="primary" (click)="setDone(set)"></ion-checkbox> 
+          </div>
+        </div> 
+      </ion-card-content>
+  
+    </ion-card>
+  
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title *ngIf="rest > 0 && done !== sets.length">{{rest}}</ion-card-title>
+        <ion-card-title *ngIf="rest == 0 && done !== sets">Done resting!</ion-card-title>
+        <ion-card-title *ngIf="done == sets.length">Workout finished</ion-card-title>
+      </ion-card-header>
+  
+      <ion-card-content *ngIf="done == sets.length">
+        <ion-button color="danger" expand="block" (click)="workoutFinished()">Done</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
+  <section *ngIf="meta == 'view'" class="view-workout">
+    <ion-card>
+
+      <div>
+        <div style="display: block" *ngFor="let exercise of exercises">
+          <canvas baseChart
+                  [datasets]="exercise.barChartData"
+                  [labels]="exercise.barChartLabels"
+                  [options]="barChartOptions"
+                  [legend]="barChartLegend"
+                  [chartType]="barChartType">
+          </canvas>
+        </div>
+      </div>
+  
+    </ion-card>
+  </section>
+
+  <ion-button expand="full" (click)="dismiss()">Close</ion-button>
 </ion-content>
