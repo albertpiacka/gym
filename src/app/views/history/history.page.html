@@ -13,4 +13,38 @@
       <ion-title size="large">History</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-list>
+    <ion-card *ngFor="let workout of workouts" class="exercise-card">
+      <ion-card-header>
+        <ion-card-title>{{workout.name}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-card-subtitle>Exercises: </ion-card-subtitle>
+        <h1 *ngFor="let exercise of workout.exercises">
+          <u>{{exercise.name}}</u>
+          <h2 *ngFor="let set of exercise.sets">
+            {{set.reps}} reps | 
+            <strong>{{set.weight}} Kg</strong>
+          </h2>
+        </h1>
+      </ion-card-content>
+
+      <aside>
+        <small *ngIf="workout.created_at">{{workout.created_at}}</small>
+      </aside>
+    </ion-card>
+
+    <ion-card *ngIf="workouts.length == 0">
+      <ion-card-header>
+        <ion-card-title>You have no history of workouts yet!</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <ion-button class="newWorkoutBtn" expand="block" color="danger" routerDirection="root" routerLink="/workouts">
+          Do some training
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>  
 </ion-content>
