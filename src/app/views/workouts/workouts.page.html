@@ -22,9 +22,11 @@
       <ion-card-content>
         <ion-card-subtitle>Exercises: </ion-card-subtitle>
         <h1 *ngFor="let exercise of workout.exercises">
-          {{exercise.name}} 
-          | {{exercise.sets}} x {{exercise.reps}}
-          | <strong>{{exercise.starting}} kg</strong>
+          <u>{{exercise.name}}</u>
+          <h2 *ngFor="let set of exercise.sets">
+            {{set.reps}} reps | 
+            <strong>{{set.weight}} Kg</strong>
+          </h2>
         </h1>
       </ion-card-content>
 
@@ -65,9 +67,9 @@
       </footer>
     </ion-card>
 
-    <ion-card *ngIf="workouts.length == 0" class="intro-card">
+    <ion-card *ngIf="workouts.length == 0">
       <ion-card-header>
-        <ion-card-title>You haven't created any workout yet!</ion-card-title>
+        <ion-card-title>You haven't created any workout    yet!</ion-card-title>
       </ion-card-header>
       
       <ion-card-content>
