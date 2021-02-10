@@ -27,6 +27,7 @@
 
 ion-menu-button {
     color: var(--color-custom-highlight);
+    font-size: 3em;
 }
 
 .exercise-card {
@@ -42,16 +43,12 @@ ion-menu-button {
 
     aside {
         font-size: 1.2em;
-        padding: 0 1em;
+        padding: 1em;
+    }
+
+    .starting-weight {
+        margin: 1em 0;
     }
 }
 
-.intro-card {
-    .newWorkoutBtn {
-        position: absolute;
-        width: 90%;
-        left: 5%;
-        bottom: 1em;
-    }
-}
 
