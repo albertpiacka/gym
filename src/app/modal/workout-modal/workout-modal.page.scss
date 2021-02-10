@@ -1,0 +1,11 @@
+.sets {
+    display: flex;
+    grid-gap: 3em;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2em 0;
+
+    ion-checkbox {
+        --size: 1.2em;
+    }
+}
