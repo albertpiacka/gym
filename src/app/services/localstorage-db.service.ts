@@ -21,7 +21,7 @@ export class LocalstorageDbService {
     db.defaults({ workouts: [], favorites: [], archived: [], trash: [], history: []})
       .write()
 
-      this.db = db
+    this.db = db
   } 
 
   public returnDb(){
