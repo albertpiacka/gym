@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { LocalstorageDbService } from './services/localstorage-db.service'
-import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +16,7 @@ export class AppComponent {
     { title: 'Trash', url: '/trash', icon: 'trash' },
     { title: 'History', url: '/history', icon: 'calendar' },
   ];
-  constructor(private localStorageDbService: LocalstorageDbService, private nativeStorage: NativeStorage) {}
+  constructor(private localStorageDbService: LocalstorageDbService) {}
   
 
   ngOnInit() {
@@ -26,17 +25,5 @@ export class AppComponent {
     }
     this.user = localStorage.getItem('name')
     this.localStorageDbService.createExerciseDb()
-    
-    this.nativeStorage.setItem('myitem', {property: 'value', anotherProperty: 'anotherValue'})
-      .then(
-        () => console.log('Stored item!'),
-        error => console.error('Error storing item', error)
-      );
-
-    this.nativeStorage.getItem('myitem')
-      .then(
-        data => console.log(data),
-        error => console.error(error)
-      );
   }
 }
