@@ -33,6 +33,10 @@ ion-menu-button {
 .exercise-card {
     min-height: 17em;
 
+    ion-card-title {
+        max-width: 80%;
+    }
+
     footer {
         padding: 1em;
         font-size: 1.5em;
