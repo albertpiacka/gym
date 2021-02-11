@@ -27,7 +27,7 @@
   
     <ion-card>
       <ion-card-header>
-        <ion-card-title *ngIf="rest > 0 && done !== sets.length">{{rest}}</ion-card-title>
+        <ion-card-title *ngIf="rest > 0 && done !== sets.length">Rest for {{rest}} seconds</ion-card-title>
         <ion-card-title *ngIf="rest == 0 && done !== sets">Done resting!</ion-card-title>
         <ion-card-title *ngIf="done == sets.length">Workout finished</ion-card-title>
       </ion-card-header>
