@@ -1,6 +1,7 @@
 import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { LocalstorageDbService } from 'src/app/services/localstorage-db.service';
 
 @Component({
@@ -14,7 +15,6 @@ export class WorkoutModalPage implements OnInit {
   @Input() meta: string;
 
   // Variables for meta VIEW
-
   history: any[] = []
 
   exercises: any[] = []
@@ -39,19 +39,15 @@ export class WorkoutModalPage implements OnInit {
   // Total number of sets
   sets: any[] = []
 
-  constructor(private localStorageDbService: LocalstorageDbService, public modalController: ModalController) { }
+  constructor(private localStorageDbService: LocalstorageDbService, public modalController: ModalController, public toastController: ToastController) { }
 
   public barChartOptions = {
     scaleShowVerticalLines: false,
     responsive: true
   };
   
-  public barChartLabels = ['10', '10', '10', '10'];
   public barChartType = 'line';
   public barChartLegend = true;
-  public barChartData = [
-    {data: [55, 55, 57.5, 60 ], label: 'Series A'},
-  ];
 
   ngOnInit() { 
     // Initialize database 
@@ -64,10 +60,11 @@ export class WorkoutModalPage implements OnInit {
     this.history = this.db.get('history')
                           .value()
 
+    // Meta view
     // Next we filter only history regarding this workout
     this.history = this.history.filter(w => w.id == this.workout.id)
 
-    this.data.exercises.forEach(e => {
+    this.workout.exercises.forEach(e => {
       this.exercises.push({id: e.id, sets: [], barChartLabels: [], barChartData: [{data: [], label: ''}]})
     })
 
@@ -82,12 +79,16 @@ export class WorkoutModalPage implements OnInit {
       })
     })
 
+    // Meta play
     // Push each set to array so we can get total length of sets 
-    this.data.exercises.forEach(e => {
+    this.workout.exercises.forEach(e => {
       e.sets.forEach(set => {
         this.sets.push(set)
       })
     })
+
+    //Meta edit
+
   }
 
   setDone(set){
@@ -115,23 +116,38 @@ export class WorkoutModalPage implements OnInit {
       e.sets.forEach(set => {
         // Each set has to be returned to 'unfinished' state before each new workout 
         // Weight is also raised by an increment
-        set.weight = Number(set.weight) + e.increments
+        set.weight = Number(set.weight) + Number(e.increments)
         set.finished = false
       })
     })
 
-    // Replace original workout with new workout (weight is larger now due to increments)
+    // Add record to history
+    this.db.get('history')
+           .unshift(this.workout)
+           .write()
+
+    this.presentToast()
+
+    setTimeout(()=>{
+      this.dismiss()
+    }, 1000)
+  }
+
+  saveChanges(){
     this.db.get('workouts')
            .find({id: this.workout.id})
            .assign(this.workout)
            .write()
 
-    // Push new record of workout to history table
-    this.db.get('history')
-           .push(this.workout)
-           .write()
-
     this.dismiss()
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: `Congratulations! You finished you workout ${this.workout.name}`,
+      duration: 2000
+    });
+    toast.present();
   }
 
   dismiss() {
