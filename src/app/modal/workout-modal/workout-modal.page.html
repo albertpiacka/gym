@@ -5,10 +5,16 @@
 </ion-header>
 
 <ion-content>
+  <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="dismiss()">
+    <ion-fab-button>
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <section *ngIf="meta == 'play'" class="play-workout">
     <ion-card>
       <ion-card-content>
-        <div class="exercise" *ngFor="let exercise of data.exercises">
+        <div class="exercise" *ngFor="let exercise of workout.exercises">
           <h1>{{exercise.name}}</h1>
           <div class="sets" *ngFor="let set of exercise.sets">
             1 X {{set.reps}} | {{set.weight}} Kg
@@ -50,5 +56,47 @@
     </ion-card>
   </section>
 
-  <ion-button expand="full" (click)="dismiss()">Close</ion-button>
+  <section *ngIf="meta == 'edit'" class="edit-workout">
+    <ion-item>
+      <ion-label class="edit-label">Name of workout</ion-label>
+      <ion-input placeholder="Name of workout" [(ngModel)]="workout.name"></ion-input>
+    </ion-item>
+
+    <ion-card *ngFor="let exercise of workout.exercises">
+      <ion-item>
+        <ion-label class="edit-label">Name of exercise</ion-label>
+        <ion-input placeholder="Name of exercise" [(ngModel)]="exercise.name"></ion-input>
+      </ion-item>
+
+      <ion-item class="addSet" *ngFor="let set of exercise.sets">
+        <div class="wrapper">
+          <ion-label class="edit-label">Reps</ion-label>
+          <ion-input placeholder="Reps" [(ngModel)]="set.reps"></ion-input>
+          <ion-label class="edit-label">Weight</ion-label>
+          <ion-input placeholder="Starting weight" [(ngModel)]="set.weight"></ion-input>
+          <ion-label class="edit-label">Resting time</ion-label>
+          <ion-input placeholder="Set rest time" [(ngModel)]="set.rest"></ion-input>
+        </div>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="edit-label">Increments</ion-label>
+        <ion-select placeholder="Increments per workout" [(ngModel)]="exercise.increments">
+          <ion-select-option value="0">0</ion-select-option>
+          <ion-select-option value="1">1</ion-select-option>
+          <ion-select-option value="2">2</ion-select-option>
+          <ion-select-option value="2.5">2.5</ion-select-option>
+          <ion-select-option value="3">3</ion-select-option>
+          <ion-select-option value="5">5</ion-select-option>
+          <ion-select-option value="10">10</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card>
+    
+    <ion-card-content>
+      <ion-button color="danger" expand="block" (click)="saveChanges()">Save changes</ion-button>
+    </ion-card-content>
+  </section>
+
+  <!-- <ion-button expand="full" (click)="dismiss()">Close</ion-button> -->
 </ion-content>
