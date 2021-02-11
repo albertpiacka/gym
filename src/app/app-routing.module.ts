@@ -2,26 +2,17 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: 'folder/Inbox',
-  //   pathMatch: 'full'
-  // },
-  // {
-  //   path: 'folder/:id',
-  //   loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
-  // },
   {
     path: '',
     loadChildren: () => import('./views/home/home.module').then( m => m.HomePageModule)
   },
   {
-    path: 'new-workout',
-    loadChildren: () => import('./views/new-workout/new-workout.module').then( m => m.NewWorkoutPageModule)
-  },
-  {
     path: 'workouts',
     loadChildren: () => import('./views/workouts/workouts.module').then( m => m.WorkoutsPageModule)
+  },
+  {
+    path: 'new-workout',
+    loadChildren: () => import('./views/new-workout/new-workout.module').then( m => m.NewWorkoutPageModule)
   },
   {
     path: 'favorites',
@@ -39,10 +30,10 @@ const routes: Routes = [
     path: 'history',
     loadChildren: () => import('./views/history/history.module').then( m => m.HistoryPageModule)
   },
-  // {
-  //   path: 'workout-modal',
-  //   loadChildren: () => import('./modal/workout-modal/workout-modal.module').then( m => m.WorkoutModalPageModule)
-  // },
+  {
+    path: 'intro-modal',
+    loadChildren: () => import('./modal/intro-modal/intro-modal.module').then( m => m.IntroModalPageModule)
+  },
 ];
 
 
