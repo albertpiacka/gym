@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { WorkoutModalPage } from '../../modal/workout-modal/workout-modal.page'
 import { LocalstorageDbService } from '../../services/localstorage-db.service'
 
 @Component({
@@ -16,7 +15,7 @@ export class ArchivedPage implements OnInit {
   // Workouts
   workouts: any[] = [];
 
-  constructor(private localStorageDbService: LocalstorageDbService, public modalController: ModalController) { }
+  constructor(private localStorageDbService: LocalstorageDbService) { }
 
   ngOnInit() {
     this.db = this.localStorageDbService.returnDb()
