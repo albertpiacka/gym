@@ -17,7 +17,7 @@ export class HistoryPage implements OnInit {
 
   ngOnInit() {
     this.db = this.localStorageDbService.returnDb()
-    this.workouts = this.db.get('history').value()
+    this.workouts = this.db.get('history').cloneDeep().value()
   }
 
 }
