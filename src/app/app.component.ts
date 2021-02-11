@@ -19,8 +19,10 @@ export class AppComponent {
   constructor(private localStorageDbService: LocalstorageDbService) {}
 
   ngOnInit() {
-    this.user = 'Albert';
-    localStorage.setItem('name', this.user)
+    if(!localStorage.getItem('name')){
+      localStorage.setItem('name', '')
+    }
+    this.user = localStorage.getItem('name')
     this.localStorageDbService.createExerciseDb()
   }
 }
