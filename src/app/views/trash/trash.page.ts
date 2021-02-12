@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalstorageDbService } from 'src/app/services/localstorage-db.service';
+import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-trash',
@@ -7,34 +7,64 @@ import { LocalstorageDbService } from 'src/app/services/localstorage-db.service'
   styleUrls: ['./trash.page.scss'],
 })
 export class TrashPage implements OnInit {
-
-  // Database variable
-  db: any = '';
-
   // Workouts
   workouts: any[] = [];
 
-  constructor(private localStorageDbService: LocalstorageDbService) { }
+  constructor(
+    private storage: Storage
+  ) { }
 
   ngOnInit() {
-    this.db = this.localStorageDbService.returnDb()
-    this.workouts = this.db.get('trash').value()
+    this.storage.get('trash').then(val => {
+      this.workouts = val
+    })
   }
 
   reviveWorkout(workout){
-    this.db.get('trash')
-           .remove({id: workout.id})
-           .write()
+    let id = 0
 
-    this.db.get('workouts')
-           .push(workout)
-           .write()
+    this.storage.get('workouts').then(val => {
+      id += val.length + 1
+    }).then(() => {
+      this.storage.get('favorites').then(val => {
+        id += val.length + 1
+      })
+    }).then(() => {
+      this.storage.get('archived').then(val => {
+        id += val.length + 1
+      })
+
+      workout.id = id
+
+      this.storage.get('trash').then(val => {
+        let all = val
+        all = all.filter(w => w.id !== workout.id)
+  
+        this.storage.set('trash', all)
+      })
+
+      this.storage.get('workouts').then(val => {
+        let all = val
+
+        all.push(workout)
+
+        this.storage.set('workouts', all)
+
+        this.workouts = this.workouts.filter(w => w.id !== workout.id)
+      })
+    })
   }
 
   deletePermanently(workout){
-    this.db.get('trash')
-           .remove({id: workout.id})
-           .write()
+    this.storage.get('trash').then(val => {
+      let all = val
+
+      all = all.filter(w => w.id !== workout.id)
+
+      this.storage.set('trash', all)
+
+      this.workouts = this.workouts.filter(w => w.id !== workout.id)
+    })
   }
 
 }
