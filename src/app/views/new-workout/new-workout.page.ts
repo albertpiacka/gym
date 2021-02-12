@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalstorageDbService } from '../../services/localstorage-db.service'
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 interface Exercise {
   id: number,
@@ -8,12 +9,20 @@ interface Exercise {
   increments: number,
 }
 
+interface Workout {
+  id: number,
+  name: string,
+  created_at: string,
+  exercises: Exercise[],
+}
+
 @Component({
   selector: 'app-new-workout',
   templateUrl: './new-workout.page.html',
   styleUrls: ['./new-workout.page.scss'],
 })
 export class NewWorkoutPage implements OnInit {
+
   // Input for workout name
   workoutName: string = '';
 
@@ -28,16 +37,15 @@ export class NewWorkoutPage implements OnInit {
 
   increments: number = 2.5;
 
-  // Database variable
-  db: any = '';
-
   // Data
   exercises: Exercise[] = [];
   counter: number = 1;
 
   constructor
   (
-    private localStorageDbService: LocalstorageDbService
+    private storage: Storage,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   addExercise(){
@@ -85,37 +93,51 @@ export class NewWorkoutPage implements OnInit {
   }
 
   createWorkout(){
-    let workouts = this.db.get('workouts')
-                          .value()
 
-    let archived = this.db.get('archived')
-                          .value()
+    let id = 0
 
-    let trash = this.db.get('trash')
-                          .value()
-
-    let id = workouts.length + 1 + archived.length + 1 + trash.length + 1
-
-    let workout = 
-    {
-      id: id,
-      name: this.workoutName,
-      created_at: Date().split(' ', 4).join().replace(/,/g, ' '),
-      status: 'unliked',
-      exercises: []
-    }
-
-    this.exercises.forEach(exercise => {
-      workout.exercises.push(exercise)
+    this.storage.get('workouts').then(val => {
+      id += val.length + 1
+    }).then(() => {
+      this.storage.get('favorites').then(val => {
+        id += val.length + 1
+      })
+    }).then(() => {
+      this.storage.get('archived').then(val => {
+        id += val.length + 1
+      })
+      
+      let workout = 
+      {
+        id: id,
+        name: this.workoutName,
+        created_at: Date().split(' ', 4).join().replace(/,/g, ' '),
+        status: 'unliked',
+        exercises: this.exercises
+      }
+  
+      this.queryWorkout(workout)
     })
+  }
 
-    this.db.get('workouts')
-           .push(workout)
-           .write()  
+  queryWorkout(w){
+    this.storage.get('workouts').then((workout: Workout[]) => {
+      if(workout){
+        let all = workout
+        all.push(w)
+        this.storage.set('workouts', all).then(() => {
+          this.router.navigate(['workouts'])
+        })
+      } else {
+        this.storage.set('workouts', [w]).then(() => {
+          this.router.navigate(['workouts'])
+        })
+      }
+    })
   }
 
   ngOnInit() {
-    this.db = this.localStorageDbService.returnDb()
+    
   }
 
 }
