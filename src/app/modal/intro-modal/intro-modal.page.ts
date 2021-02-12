@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-intro-modal',
@@ -10,18 +11,18 @@ export class IntroModalPage implements OnInit {
 
   name: string = ''
 
-  constructor(public modalController: ModalController) { }
+  constructor(
+    public modalController: ModalController,
+    private storage: Storage
+  ) { }
 
   ngOnInit() {
-
   }
 
   done(){
-    if(!localStorage.getItem('name')){
-      localStorage.setItem('name', this.name)
-
+    this.storage.set('name', this.name).then(() => {
       this.dismiss()
-    }
+    })
   }
 
   dismiss() {
