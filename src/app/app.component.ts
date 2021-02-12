@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { LocalstorageDbService } from './services/localstorage-db.service'
 
 @Component({
@@ -16,14 +17,18 @@ export class AppComponent {
     { title: 'Trash', url: '/trash', icon: 'trash' },
     { title: 'History', url: '/history', icon: 'calendar' },
   ];
-  constructor(private localStorageDbService: LocalstorageDbService) {}
+  constructor(private storage: Storage, private LocalstorageDbService: LocalstorageDbService) {}
   
 
   ngOnInit() {
-    if(!localStorage.getItem('name')){
-      localStorage.setItem('name', '')
-    }
-    this.user = localStorage.getItem('name')
-    this.localStorageDbService.createExerciseDb()
+    this.storage.get('name').then(val => {
+      if(!val){
+        this.storage.set('name', '')
+      } else {
+        this.user = val
+      }
+    })
+
+    this.LocalstorageDbService.createDb()    
   }
 }
