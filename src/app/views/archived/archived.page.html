@@ -34,14 +34,9 @@
         <small *ngIf="workout.created_at">{{workout.created_at}}</small>
       </aside>
 
-      <footer>      
-        <ion-button color="danger" (click)="addToFavorites(workout)">
-          <ion-icon name="heart-outline" *ngIf="workout.status == 'unliked'"></ion-icon>
-          <ion-icon name="heart" *ngIf="workout.status == 'liked'"></ion-icon>
-        </ion-button>
-
-        <ion-button fill="outline" color="medium" (click)="addToArchived(workout)">
-          <ion-icon name="archive-outline"></ion-icon>
+      <footer>   
+        <ion-button fill="outline" color="success" (click)="revive(workout)">
+          Revive
         </ion-button>
 
         <ion-button color="dark" (click)="addToTrash(workout)">
