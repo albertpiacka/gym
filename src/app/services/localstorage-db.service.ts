@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import low from 'lowdb'
-import LocalStorage from 'lowdb/adapters/LocalStorage'
 import { Storage } from '@ionic/storage';
 
 @Injectable({
