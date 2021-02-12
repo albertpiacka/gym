@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { WorkoutModalPage } from '../../modal/workout-modal/workout-modal.page'
-import { LocalstorageDbService } from '../../services/localstorage-db.service'
+import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-workouts',
@@ -9,8 +9,6 @@ import { LocalstorageDbService } from '../../services/localstorage-db.service'
   styleUrls: ['./workouts.page.scss'],
 })
 export class WorkoutsPage implements OnInit {
-  // Database variable
-  db: any = '';
 
   // Workouts
   workouts: any[] = [];
@@ -18,26 +16,21 @@ export class WorkoutsPage implements OnInit {
   // Exercises
   exercises: any[] = []
 
-  constructor(private localStorageDbService: LocalstorageDbService, public modalController: ModalController) { }
+  constructor
+  (
+    public modalController: ModalController,
+    private storage: Storage
+  ) { }
 
   ngOnInit() {
-    this.db = this.localStorageDbService.returnDb()
-    this.workouts = this.db.get('workouts').value()
-
-    this.workouts.forEach(workout => {
-      workout.exercises.forEach(e => {
-        this.exercises.push(e)
+    this.storage.get('workouts').then(val => {
+      val.forEach(w => {
+        this.workouts.push(w)
+        w.exercises.forEach(e => {
+          this.exercises.push(e)
+        })
       })
     })
-
-    this.exercises = this.exercises.reduce((acc, current) => {
-      const x = acc.find(item => item.name === current.name);
-      if (!x) {
-        return acc.concat([current]);
-      } else {
-        return acc;
-      }
-    }, []);
   }
 
   async presentModal(workout, meta) {
@@ -52,102 +45,101 @@ export class WorkoutsPage implements OnInit {
     return await modal.present();
   }
 
+
   addToFavorites(workout){
-    if
-    (
-      !this.db.get('favorites')
-              .find({id: workout.id})
-              .value()
-    )
-    {
-      this.db.get('workouts')
-             .find({id: workout.id})
-             .assign({status: 'liked'})
-             .write()
+    this.storage.get('favorites').then(val => {
+      if(val.filter(w => w.id == workout.id).length == 1){
+        workout.status = 'unliked'
+        let all = val
+        all = all.filter(w => w.id !== workout.id)
+        this.storage.set('favorites', all)
 
-      this.db.get('favorites')
-              .push(workout)
-              .write()
-    }
-    else 
-    {
-      this.db.get('workouts')
-             .find({id: workout.id})
-             .assign({status: 'unliked'})
-             .write()
+        this.storage.get('workouts').then(val => {
+          let all = val
 
-      this.db.get('favorites')
-             .remove({id: workout.id})
-             .write()
-    }   
+          all = all.filter(w => w.id !== workout.id)
+
+          all.push(workout)
+
+          this.storage.set('workouts', all)
+        })
+      } else {
+        workout.status = 'liked'
+        let all = val
+        all.push(workout)
+        this.storage.set('favorites', all)
+
+        this.storage.get('workouts').then(val => {
+          let all = val
+
+          all = all.filter(w => w.id !== workout.id)
+
+          all.push(workout)
+
+          this.storage.set('workouts', all)
+        })
+      }
+    })
   }
 
   addToArchived(workout){
-    if
-    (
-      !this.db.get('archived')
-              .find({id: workout.id})
-              .value()
-    )
-    {
-      this.db.get('workouts')
-             .remove({id: workout.id})
-             .write()
+    this.storage.get('archived').then(val => {
+      if(val.filter(w => w.id == workout.id).length == 0){
+        workout.status = 'unliked'
+        let all = val
+        all.push(workout)
 
-      this.db.get('favorites')
-             .remove({id: workout.id})
-             .write()
+        this.storage.set('archived', all)
 
-      this.db.get('archived')
-              .push(workout)
-              .write()
+        this.storage.get('workouts').then(val => {
+          let all = val
 
-      this.db.get('archived')
-              .find({id: workout.id})
-              .assign({status: 'unliked'})
-              .write()
-    }
-    else 
-    {
-      this.db.get('workouts')
-             .push(workout)
-             .write()
+          all = all.filter(w => w.id !== workout.id)
 
-      this.db.get('favorites')
-             .remove({id: workout.id})
-             .write()
-    }   
+          this.storage.set('workouts', all)
+        })
+
+        this.storage.get('favorites').then(val => {
+          let all = val
+
+          all = all.filter(w => w.id !== workout.id)
+
+          this.storage.set('favorites', all)
+        })
+
+        this.workouts = this.workouts.filter(w => w.id !== workout.id)
+      } 
+    })
   }
 
   addToTrash(workout){
-    if
-    (
-      !this.db.get('trash')
-              .find({id: workout.id})
-              .value()
-    )
-    {
-      this.db.get('workouts')
-             .remove({id: workout.id})
-             .write()
+    this.storage.get('trash').then(val => {
+      if(val.filter(w => w.id == workout.id).length == 0){
+        workout.status = 'unliked'
+        let all = val
+        all.push(workout)
 
-      this.db.get('archived')
-             .remove({id: workout.id})
-             .write()
+        this.storage.set('trash', all)
 
-      this.db.get('favorites')
-             .remove({id: workout.id})
-             .write()
+        this.storage.get('workouts').then(val => {
+          let all = val
 
-      this.db.get('trash')
-              .push(workout)
-              .write()
+          all = all.filter(w => w.id !== workout.id)
 
-      this.db.get('trash')
-              .find({id: workout.id})
-              .assign({status: 'unliked'})
-              .write()
-    }
+          this.storage.set('workouts', all)
+        })
+
+        this.storage.get('favorites').then(val => {
+          let all = val
+
+          all = all.filter(w => w.id !== workout.id)
+
+          this.storage.set('favorites', all)
+        })
+
+        this.workouts = this.workouts.filter(w => w.id !== workout.id)
+      } 
+    })
   }
 
 }
