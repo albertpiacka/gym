@@ -1,30 +1,23 @@
 import { Injectable } from '@angular/core';
 import low from 'lowdb'
 import LocalStorage from 'lowdb/adapters/LocalStorage'
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalstorageDbService {
-  constructor() { }
+  constructor(private storage: Storage) { }
 
-  db: any = ''
+  public createDb(){
+    let dataSets = ['workouts', 'favorites', 'archived', 'trash', 'history']
 
-  public returnName(){
-    return localStorage.getItem('name')
-  }
-
-  public createExerciseDb(){
-    const adapter = new LocalStorage('db')
-    const db = low(adapter)
-
-    db.defaults({ workouts: [], favorites: [], archived: [], trash: [], history: []})
-      .write()
-
-    this.db = db
-  } 
-
-  public returnDb(){
-    return this.db
+    dataSets.forEach(dataSet => {
+      this.storage.get(dataSet).then(val => {
+        if(!val){
+          this.storage.set(dataSet, [])
+        }
+      })
+    })
   }
 }
