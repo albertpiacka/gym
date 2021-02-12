@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalstorageDbService } from 'src/app/services/localstorage-db.service';
+import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-history',
@@ -7,17 +7,18 @@ import { LocalstorageDbService } from 'src/app/services/localstorage-db.service'
   styleUrls: ['./history.page.scss'],
 })
 export class HistoryPage implements OnInit {
-  // Database variable
-  db: any = '';
 
   // Workouts
   workouts: any[] = [];
  
-  constructor(private localStorageDbService: LocalstorageDbService) { }
+  constructor(
+    private storage: Storage
+  ) { }
 
   ngOnInit() {
-    this.db = this.localStorageDbService.returnDb()
-    this.workouts = this.db.get('history').cloneDeep().value()
+    this.storage.get('history').then(val => {
+      this.workouts = val
+    })
   }
 
 }
