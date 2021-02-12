@@ -2,7 +2,7 @@ import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
-import { LocalstorageDbService } from 'src/app/services/localstorage-db.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-workout-modal',
@@ -24,9 +24,6 @@ export class WorkoutModalPage implements OnInit {
   // Workout variable
   workout: any = ''
 
-  // Database variable
-  db: any = '';
-
   // Rest counter value 
   rest: number = null
 
@@ -39,7 +36,11 @@ export class WorkoutModalPage implements OnInit {
   // Total number of sets
   sets: any[] = []
 
-  constructor(private localStorageDbService: LocalstorageDbService, public modalController: ModalController, public toastController: ToastController) { }
+  constructor(
+    public modalController: ModalController,
+    public toastController: ToastController,
+    private storage: Storage,
+  ) { }
 
   public barChartOptions = {
     scaleShowVerticalLines: false,
@@ -50,31 +51,29 @@ export class WorkoutModalPage implements OnInit {
   public barChartLegend = true;
 
   ngOnInit() { 
-    // Initialize database 
-    this.db = this.localStorageDbService.returnDb()
 
     // Workout data
     this.workout = this.data
     
     // We get all history data of workouts
-    this.history = this.db.get('history')
-                          .value()
+    this.storage.get('history').then(val => {
+      this.history = val
 
-    // Meta view
-    // Next we filter only history regarding this workout
-    this.history = this.history.filter(w => w.id == this.workout.id)
+      // Next we filter only history regarding this workout
+      this.history = this.history.filter(w => w.id == this.workout.id)
 
-    this.workout.exercises.forEach(e => {
-      this.exercises.push({id: e.id, sets: [], barChartLabels: [], barChartData: [{data: [], label: ''}]})
-    })
-
-    this.history.forEach(w => {
-      w.exercises.forEach(e => {
-        e.sets.forEach(s => {
-          this.exercises.filter(n => n.id == e.id)[0].sets.push(s)
-          this.exercises.filter(n => n.id == e.id)[0].barChartLabels.push(s.reps)
-          this.exercises.filter(n => n.id == e.id)[0].barChartData[0].data.push(s.weight)
-          this.exercises.filter(n => n.id == e.id)[0].barChartData[0].label = e.name
+      this.workout.exercises.forEach(e => {
+        this.exercises.push({id: e.id, sets: [], barChartLabels: [], barChartData: [{data: [], label: ''}]})
+      })
+  
+      this.history.forEach(w => {
+        w.exercises.forEach(e => {
+          e.sets.forEach(s => {
+            this.exercises.filter(n => n.id == e.id)[0].sets.push(s)
+            this.exercises.filter(n => n.id == e.id)[0].barChartLabels.push(s.reps)
+            this.exercises.filter(n => n.id == e.id)[0].barChartData[0].data.push(s.weight)
+            this.exercises.filter(n => n.id == e.id)[0].barChartData[0].label = e.name
+          })
         })
       })
     })
@@ -86,9 +85,6 @@ export class WorkoutModalPage implements OnInit {
         this.sets.push(set)
       })
     })
-
-    //Meta edit
-
   }
 
   setDone(set){
@@ -122,9 +118,7 @@ export class WorkoutModalPage implements OnInit {
     })
 
     // Add record to history
-    this.db.get('history')
-           .unshift(this.workout)
-           .write()
+    
 
     this.presentToast()
 
@@ -134,12 +128,7 @@ export class WorkoutModalPage implements OnInit {
   }
 
   saveChanges(){
-    this.db.get('workouts')
-           .find({id: this.workout.id})
-           .assign(this.workout)
-           .write()
-
-    this.dismiss()
+    
   }
 
   async presentToast() {
