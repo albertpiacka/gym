@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { LocalstorageDbService } from '../../services/localstorage-db.service'
+import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-archived',
@@ -9,118 +8,74 @@ import { LocalstorageDbService } from '../../services/localstorage-db.service'
 })
 export class ArchivedPage implements OnInit {
 
-  // Database variable
-  db: any = '';
-
   // Workouts
   workouts: any[] = [];
 
-  constructor(private localStorageDbService: LocalstorageDbService) { }
+  constructor(
+    private storage: Storage
+  ) { }
 
   ngOnInit() {
-    this.db = this.localStorageDbService.returnDb()
-    this.workouts = this.db.get('archived').value()
+    this.storage.get('archived').then(val => {
+      this.workouts = val
+    })
   }
 
-  addToFavorites(workout){
-    if
-    (
-      !this.db.get('favorites')
-              .find({id: workout.id})
-              .value()
-    )
-    {
-      this.db.get('workouts')
-             .push(workout)
-             .write()
+  revive(workout){
+    this.storage.get('archived').then(val => {
+      let all = val
+      all = all.filter(w => w.id !== workout.id)
 
-      this.db.get('workouts')
-             .find({id: workout.id})
-             .assign({status: 'liked'})
-             .write()
+      this.storage.set('archived', all)
 
-      this.db.get('archived')
-             .remove({id: workout.id})
-             .write()
+      this.storage.get('workouts').then(val => {
+        let all = val
 
-      this.db.get('favorites')
-              .push(workout)
-              .write()
+        all.push(workout)
 
-      this.db.get('favorites')
-              .find({id: workout.id})
-              .assign({status: 'liked'})
-              .write()
-    }
-    else 
-    {
-      this.db.get('workouts')
-             .find({id: workout.id})
-             .assign({status: 'unliked'})
-             .write()
+        this.storage.set('workouts', all)
 
-      this.db.get('favorites')
-             .remove({id: workout.id})
-             .write()
-    }   
-  }
-
-  addToArchived(workout){
-    if
-    (
-      !this.db.get('archived')
-              .find({id: workout.id})
-              .value()
-    )
-    {
-      this.db.get('workouts')
-             .remove({id: workout.id})
-             .write()
-
-      this.db.get('favorites')
-             .remove({id: workout.id})
-             .write()
-
-      this.db.get('archived')
-              .push(workout)
-              .write()
-    }
-    else 
-    {
-      this.db.get('workouts')
-             .push(workout)
-             .write()
-
-      this.db.get('archived')
-             .remove({id: workout.id})
-             .write()
-    }   
+        this.workouts = this.workouts.filter(w => w.id !== workout.id)
+      })
+    })
   }
 
   addToTrash(workout){
-    if
-    (
-      !this.db.get('trash')
-              .find({id: workout.id})
-              .value()
-    )
-    {
-      this.db.get('workouts')
-             .remove({id: workout.id})
-             .write()
+   this.storage.get('trash').then(val => {
+      if(val.filter(w => w.id == workout.id).length == 0){
+        workout.status = 'unliked'
+        let all = val
+        all.push(workout)
 
-      this.db.get('archived')
-             .remove({id: workout.id})
-             .write()
+        this.storage.set('trash', all)
 
-      this.db.get('favorites')
-             .remove({id: workout.id})
-             .write()
+        this.storage.get('workouts').then(val => {
+          let all = val
 
-      this.db.get('trash')
-              .push(workout)
-              .write()
-    }
+          all = all.filter(w => w.id !== workout.id)
+
+          this.storage.set('workouts', all)
+        })
+
+        this.storage.get('favorites').then(val => {
+          let all = val
+
+          all = all.filter(w => w.id !== workout.id)
+
+          this.storage.set('favorites', all)
+        })
+
+        this.storage.get('archived').then(val => {
+          let all = val
+
+          all = all.filter(w => w.id !== workout.id)
+
+          this.storage.set('archived', all)
+        })
+
+        this.workouts = this.workouts.filter(w => w.id !== workout.id)
+      } 
+    })
   }
 
 }
