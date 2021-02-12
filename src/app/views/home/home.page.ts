@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { IntroModalPage } from '../../modal/intro-modal/intro-modal.page'
+import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-home',
@@ -52,20 +53,23 @@ export class HomePage implements OnInit {
     }
   ]
 
-  constructor(public modalController: ModalController) { }
+  constructor(
+    public modalController: ModalController,
+    private storage: Storage
+  ) { }
 
   ngOnInit() {
 
     this.selectedQuote = this.quotes[this.getRandomInt(this.quotes.length)]
 
-    console.log(this.selectedQuote)
-
-    if(!localStorage.getItem('name')){
-      this.presentModal()
-    } else {
-      this.nameSet = true
-      this.name = localStorage.getItem('name')
-    }
+    this.storage.get('name').then(val => {
+      if(!val){
+        this.presentModal()
+      } else {
+        this.nameSet = true
+        this.name = val
+      }
+    })
   }
 
   getRandomInt(max) {
