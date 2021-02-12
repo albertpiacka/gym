@@ -52,8 +52,7 @@
           </ion-fab-list>
         </ion-fab>
 
-        <ion-button color="danger" (click)="addToFavorites(workout)">
-          <ion-icon name="heart-outline" *ngIf="workout.status == 'unliked'"></ion-icon>
+        <ion-button color="danger" (click)="removeFromFavorites(workout)">
           <ion-icon name="heart" *ngIf="workout.status == 'liked'"></ion-icon>
         </ion-button>
 
