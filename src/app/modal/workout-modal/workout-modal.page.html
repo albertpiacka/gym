@@ -11,6 +11,14 @@
     </ion-fab-button>
   </ion-fab>
 
+  <ion-fab vertical="top" horizontal="start" slot="fixed" *ngIf="meta == 'play'" [@scaleIn]>
+    <ion-button color="danger">
+      <ion-card-title *ngIf="rest > 0 && done !== sets.length">Rest for {{rest}} seconds</ion-card-title>
+      <ion-card-title *ngIf="rest == 0 && done !== sets.length">Done resting!</ion-card-title>
+      <ion-card-title *ngIf="done == sets.length">Workout finished</ion-card-title>
+    </ion-button>
+  </ion-fab>
+
   <section *ngIf="meta == 'play'" class="play-workout" [@scaleIn]>
     <ion-card>
       <ion-card-content>
@@ -26,12 +34,6 @@
     </ion-card>
   
     <ion-card [@scaleIn]>
-      <ion-card-header>
-        <ion-card-title *ngIf="rest > 0 && done !== sets.length">Rest for {{rest}} seconds</ion-card-title>
-        <ion-card-title *ngIf="rest == 0 && done !== sets.length">Done resting!</ion-card-title>
-        <ion-card-title *ngIf="done == sets.length">Workout finished</ion-card-title>
-      </ion-card-header>
-  
       <ion-card-content *ngIf="done == sets.length">
         <ion-button color="danger" expand="block" (click)="workoutFinished()">Done</ion-button>
       </ion-card-content>
