@@ -34,11 +34,11 @@ const routes: Routes = [
     path: 'intro-modal',
     loadChildren: () => import('./modal/intro-modal/intro-modal.module').then( m => m.IntroModalPageModule)
   },
-  // {
-  //   path: '404', 
-  //   loadChildren: () => import('./views/history/history.module').then( m => m.HistoryPageModule)
-  // },
-  // {path: '**', redirectTo: '/404'}
+  {
+    path: '404', 
+    loadChildren: () => import('./views/not-found/not-found.module').then( m => m.NotFoundPageModule)
+  },
+  {path: '**', redirectTo: '/404'}
 ];
 
 
