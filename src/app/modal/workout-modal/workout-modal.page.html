@@ -1,17 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{data.name}}</ion-title>
+    <ion-title [@scaleIn]>{{data.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [@scaleIn]>
   <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="dismiss()">
     <ion-fab-button>
       <ion-icon name="close-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <section *ngIf="meta == 'play'" class="play-workout">
+  <section *ngIf="meta == 'play'" class="play-workout" [@scaleIn]>
     <ion-card>
       <ion-card-content>
         <div class="exercise" *ngFor="let exercise of workout.exercises">
@@ -25,10 +25,10 @@
   
     </ion-card>
   
-    <ion-card>
+    <ion-card [@scaleIn]>
       <ion-card-header>
         <ion-card-title *ngIf="rest > 0 && done !== sets.length">Rest for {{rest}} seconds</ion-card-title>
-        <ion-card-title *ngIf="rest == 0 && done !== sets">Done resting!</ion-card-title>
+        <ion-card-title *ngIf="rest == 0 && done !== sets.length">Done resting!</ion-card-title>
         <ion-card-title *ngIf="done == sets.length">Workout finished</ion-card-title>
       </ion-card-header>
   
@@ -39,7 +39,7 @@
   </section>
 
   <section *ngIf="meta == 'view'" class="view-workout">
-    <ion-card>
+    <ion-card [@scaleIn]>
 
       <div>
         <div style="display: block" *ngFor="let exercise of exercises">
@@ -56,7 +56,7 @@
     </ion-card>
   </section>
 
-  <section *ngIf="meta == 'edit'" class="edit-workout">
+  <section *ngIf="meta == 'edit'" class="edit-workout" [@scaleIn]>
     <ion-item>
       <ion-label class="edit-label">Name of workout</ion-label>
       <ion-input placeholder="Name of workout" [(ngModel)]="workout.name"></ion-input>
@@ -93,10 +93,8 @@
       </ion-item>
     </ion-card>
     
-    <ion-card-content>
+    <ion-card-content [@scaleIn]>
       <ion-button color="danger" expand="block" (click)="saveChanges()">Save changes</ion-button>
     </ion-card-content>
   </section>
-
-  <!-- <ion-button expand="full" (click)="dismiss()">Close</ion-button> -->
 </ion-content>

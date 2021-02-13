@@ -1,12 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { WorkoutModalPage } from '../../modal/workout-modal/workout-modal.page'
+import { trigger, state, style, animate, transition } from '@angular/animations' 
 import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.page.html',
   styleUrls: ['./favorites.page.scss'],
+  animations: [ 
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'scale(0.75)'
+        }),
+
+        animate('0.2s ease')
+      ]),
+
+      transition(':leave', [
+        animate(
+          '0.2s ease', 
+          style({
+            opacity: 0,
+            transform: 'scale(0.75)'
+          })
+        )
+      ])
+    ]),
+  ]
 })
 export class FavoritesPage implements OnInit {
 

@@ -1,12 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { WorkoutModalPage } from '../../modal/workout-modal/workout-modal.page'
+import { trigger, state, style, animate, transition } from '@angular/animations' 
+
 import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-workouts',
   templateUrl: './workouts.page.html',
   styleUrls: ['./workouts.page.scss'],
+  animations: [ 
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'scale(0.75)'
+        }),
+
+        animate('0.2s ease')
+      ]),
+
+      transition(':leave', [
+        animate(
+          '0.2s ease', 
+          style({
+            opacity: 0,
+            transform: 'scale(0.75)'
+          })
+        )
+      ])
+    ]),
+  ]
 })
 export class WorkoutsPage implements OnInit {
 
@@ -25,7 +49,7 @@ export class WorkoutsPage implements OnInit {
   ngOnInit() {
     this.storage.get('workouts').then(val => {
       val.forEach(w => {
-        this.workouts.push(w)
+        this.workouts.unshift(w)
         w.exercises.forEach(e => {
           this.exercises.push(e)
         })

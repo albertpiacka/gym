@@ -1,10 +1,33 @@
 import { Component, OnInit } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations' 
 import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-trash',
   templateUrl: './trash.page.html',
   styleUrls: ['./trash.page.scss'],
+  animations: [ 
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'scale(0.75)'
+        }),
+
+        animate('0.2s ease')
+      ]),
+
+      transition(':leave', [
+        animate(
+          '0.2s ease', 
+          style({
+            opacity: 0,
+            transform: 'scale(0.75)'
+          })
+        )
+      ])
+    ]),
+  ]
 })
 export class TrashPage implements OnInit {
   // Workouts
@@ -21,35 +44,19 @@ export class TrashPage implements OnInit {
   }
 
   reviveWorkout(workout){
-    let id = 0
+    this.storage.get('trash').then(val => {
+      let all = val
+      all = all.filter(w => w.id !== workout.id)
 
-    this.storage.get('workouts').then(val => {
-      id += val.length + 1
-    }).then(() => {
-      this.storage.get('favorites').then(val => {
-        id += val.length + 1
-      })
-    }).then(() => {
-      this.storage.get('archived').then(val => {
-        id += val.length + 1
-      })
-
-      workout.id = id
-
-      this.storage.get('trash').then(val => {
-        let all = val
-        all = all.filter(w => w.id !== workout.id)
-  
-        this.storage.set('trash', all)
-      })
+      this.storage.set('trash', all)
 
       this.storage.get('workouts').then(val => {
         let all = val
-
+  
         all.push(workout)
-
+  
         this.storage.set('workouts', all)
-
+  
         this.workouts = this.workouts.filter(w => w.id !== workout.id)
       })
     })

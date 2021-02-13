@@ -15,7 +15,7 @@
   </ion-header>
 
   <ion-list>
-    <ion-card *ngFor="let workout of workouts" class="exercise-card">
+    <ion-card *ngFor="let workout of workouts" class="exercise-card" [@scaleIn]>
       <ion-card-header>
         <ion-card-title>{{workout.name}}</ion-card-title>
       </ion-card-header>

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Storage
 import { IonicStorageModule } from '@ionic/storage';
@@ -25,6 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
   entryComponents: [WorkoutModalPage],
   imports: [
     BrowserModule, 
+    BrowserAnimationsModule,
     IonicModule.forRoot(), 
     AppRoutingModule,
     FormsModule,

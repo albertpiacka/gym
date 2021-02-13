@@ -2,12 +2,35 @@ import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
+import { trigger, state, style, animate, transition } from '@angular/animations' 
 import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-workout-modal',
   templateUrl: './workout-modal.page.html',
   styleUrls: ['./workout-modal.page.scss'],
+  animations: [ 
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'scale(0.75)'
+        }),
+
+        animate('0.2s ease')
+      ]),
+
+      transition(':leave', [
+        animate(
+          '0.2s ease', 
+          style({
+            opacity: 0,
+            transform: 'scale(0.75)'
+          })
+        )
+      ])
+    ]),
+  ]
 })
 export class WorkoutModalPage implements OnInit {
 
@@ -47,8 +70,8 @@ export class WorkoutModalPage implements OnInit {
     responsive: true
   };
   
-  public barChartType = 'line';
-  public barChartLegend = true;
+  barChartType: any = 'line';
+  barChartLegend: any = true;
 
   ngOnInit() { 
 
@@ -117,23 +140,76 @@ export class WorkoutModalPage implements OnInit {
       })
     })
 
-    // Add record to history
-    
+    // Update workout 
+    this.storage.get('workouts').then(val => {
+      let all = val
 
-    this.presentToast()
+      all = all.filter(w => w.id !== this.workout.id)
 
-    setTimeout(()=>{
-      this.dismiss()
-    }, 1000)
+      all.push(this.workout)
+
+      this.storage.set('workouts', all)
+
+      // Add record to history
+      this.storage.get('history').then(val => {
+        this.workout.exercises.forEach(e => {
+          e.sets.forEach(set => {
+            // Each set has to be returned to 'unfinished' state before each new workout 
+            // Weight is also raised by an increment
+            set.weight = Number(set.weight) - Number(e.increments)
+            set.finished = false
+          })
+        })
+
+        let all = val
+
+        all.push(this.workout)
+
+        this.storage.set('history', all).then(() => {
+          this.presentToast(
+            `Congratulations! You successfully finished your workout ${this.workout.name}`
+          )
+
+          setTimeout(()=>{
+            this.dismiss()
+          }, 1000)
+        })
+      })
+    })
   }
 
   saveChanges(){
-    
+    console.log(this.workout)
+    this.storage.get('workouts').then(val => {
+      let all = val
+
+      all = all.filter(w => w.id !== this.workout.id)
+
+      all.push(this.workout)
+
+      this.storage.get('favorites').then(val => {
+        let all = val
+
+        all = all.filter(w => w.id !== this.workout.id)
+
+        all.push(this.workout)
+
+        this.storage.set('favorites', all)
+      })
+
+      this.storage.set('workouts', all).then(() => {
+        this.presentToast('Changes saved')
+
+          setTimeout(()=>{
+            this.dismiss()
+          }, 1000)
+      })
+    })
   }
 
-  async presentToast() {
+  async presentToast(text) {
     const toast = await this.toastController.create({
-      message: `Congratulations! You finished you workout ${this.workout.name}`,
+      message: text,
       duration: 2000
     });
     toast.present();

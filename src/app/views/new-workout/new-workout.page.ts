@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { trigger, state, style, animate, transition } from '@angular/animations' 
 import { Storage } from '@ionic/storage';
 
 interface Exercise {
   id: number,
   name: string,
-  sets: object[],
+  sets: any[],
   increments: number,
 }
 
@@ -20,6 +21,28 @@ interface Workout {
   selector: 'app-new-workout',
   templateUrl: './new-workout.page.html',
   styleUrls: ['./new-workout.page.scss'],
+  animations: [ 
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'scale(0.75)'
+        }),
+
+        animate('0.2s ease')
+      ]),
+
+      transition(':leave', [
+        animate(
+          '0.2s ease', 
+          style({
+            opacity: 0,
+            transform: 'scale(0.75)'
+          })
+        )
+      ])
+    ]),
+  ]
 })
 export class NewWorkoutPage implements OnInit {
 
@@ -28,7 +51,7 @@ export class NewWorkoutPage implements OnInit {
 
   // Input for exercises
   name: string = '';
-  sets: object[] = []
+  sets: any[] = []
 
   setCounter: number = 1
   reps: number = null
@@ -97,26 +120,30 @@ export class NewWorkoutPage implements OnInit {
     let id = 0
 
     this.storage.get('workouts').then(val => {
-      id += val.length + 1
+      id += val.length 
     }).then(() => {
       this.storage.get('favorites').then(val => {
-        id += val.length + 1
+        id += val.length 
       })
     }).then(() => {
       this.storage.get('archived').then(val => {
-        id += val.length + 1
+        id += val.length 
       })
-      
-      let workout = 
-      {
-        id: id,
-        name: this.workoutName,
-        created_at: Date().split(' ', 4).join().replace(/,/g, ' '),
-        status: 'unliked',
-        exercises: this.exercises
-      }
-  
-      this.queryWorkout(workout)
+    }).then(() => {
+      this.storage.get('trash').then(val => {
+        id += val.length + 1
+
+        let workout = 
+        {
+          id: id,
+          name: this.workoutName,
+          created_at: Date().split(' ', 4).join().replace(/,/g, ' '),
+          status: 'unliked',
+          exercises: this.exercises
+        }
+    
+        this.queryWorkout(workout)
+      })
     })
   }
 
@@ -137,7 +164,6 @@ export class NewWorkoutPage implements OnInit {
   }
 
   ngOnInit() {
-    
   }
 
 }

@@ -1,18 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { IntroModalPage } from '../../modal/intro-modal/intro-modal.page'
+import { trigger, state, style, animate, transition } from '@angular/animations' 
 import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
+  animations: [ 
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          transform: 'scale(0.75)'
+        }),
+
+        animate('0.2s ease')
+      ]),
+
+      transition(':leave', [
+        animate(
+          '0.2s ease', 
+          style({
+            opacity: 0,
+            transform: 'scale(0.75)'
+          })
+        )
+      ])
+    ]),
+  ]
 })
 export class HomePage implements OnInit {
 
   name: string = ''
   nameSet: boolean = false
-  selectedQuote: object = {}
+  selectedQuote: any = {}
 
   quotes = [
     {

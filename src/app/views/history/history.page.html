@@ -10,12 +10,12 @@
 <ion-content>
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">History</ion-title>
+      <ion-title size="large" [@scaleIn]>History</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-list>
-    <ion-card *ngFor="let workout of workouts" class="exercise-card">
+    <ion-card *ngFor="let workout of workouts" class="exercise-card" [@scaleIn]>
       <ion-card-header>
         <ion-card-title>{{workout.name}}</ion-card-title>
       </ion-card-header>
@@ -35,7 +35,7 @@
       </aside>
     </ion-card>
 
-    <ion-card *ngIf="workouts.length == 0">
+    <ion-card *ngIf="workouts.length == 0" [@scaleIn]>
       <ion-card-header>
         <ion-card-title>You have no history of workouts yet!</ion-card-title>
       </ion-card-header>

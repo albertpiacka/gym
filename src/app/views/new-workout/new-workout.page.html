@@ -14,7 +14,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <main>
+  <main [@scaleIn]>
     <ion-item>
       <ion-input placeholder="Name of workout" [(ngModel)]="workoutName"></ion-input>
     </ion-item>
@@ -35,7 +35,7 @@
 
       <ion-item>
         <div class="sets">
-          <div class="set" *ngFor="let set of sets">
+          <div class="set" *ngFor="let set of sets" [@scaleIn]>
             {{set.reps}} reps | {{set.weight}} Kg
           </div>
         </div>
@@ -61,7 +61,7 @@
     </ion-fab>
 
     <ion-list>
-      <ion-card *ngFor="let item of exercises" class="exercise-card">
+      <ion-card *ngFor="let item of exercises" class="exercise-card" [@scaleIn]>
         <ion-card-header>
           <ion-card-subtitle>Exercise: </ion-card-subtitle>
           <ion-card-title>{{item.name}}</ion-card-title>
@@ -79,6 +79,7 @@
       expand="block" 
       color="danger" 
       (click)="createWorkout()"
+      [@scaleIn]
       *ngIf="exercises.length > 0"
     >
       Create workout
