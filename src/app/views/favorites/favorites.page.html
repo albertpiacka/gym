@@ -23,10 +23,6 @@
         <ion-card-subtitle>Exercises: </ion-card-subtitle>
         <h1 *ngFor="let exercise of workout.exercises">
           <u>{{exercise.name}}</u>
-          <h2 *ngFor="let set of exercise.sets">
-            {{set.reps}} reps | 
-            <strong>{{set.weight}} Kg</strong>
-          </h2>
         </h1>
       </ion-card-content>
 
