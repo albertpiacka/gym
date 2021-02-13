@@ -29,10 +29,6 @@ export class AppComponent {
       }
     })
 
-    this.storage.get('workouts').then(val => {
-      console.log(val)
-    })
-
     this.LocalstorageDbService.createDb()    
   }
 }
