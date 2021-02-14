@@ -2,7 +2,7 @@
   "name": "Gym app",
   "short_name": "gym",
   "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "background_color": "transparent",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
@@ -10,37 +10,31 @@
     {
       "src": "./assets/icons/favicon-16x16.png",
       "sizes": "16x16",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     },
     {
       "src": "./assets/icons/favicon-32x32.png",
       "sizes": "32x32",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     },
     {
       "src": "./assets/icons/icon-72x72.png",
       "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     },
     {
       "src": "./assets/icons/apple-touch-icon.png",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     },
     {
       "src": "./assets/icons/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     },
     {
       "src": "./assets/icons/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     }
   ]
 }
